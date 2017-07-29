@@ -682,7 +682,7 @@ namespace Shadowsocks.View
             }
             else
             {
-                configForm = new ConfigForm(controller, updateChecker, addNode ? -1 : -2);
+                configForm = new ConfigForm(controller, addNode ? -1 : -2);
                 configForm.Show();
                 configForm.Activate();
                 configForm.BringToFront();
@@ -698,13 +698,14 @@ namespace Shadowsocks.View
             }
             else
             {
-                configForm = new ConfigForm(controller, updateChecker, index);
+                configForm = new ConfigForm(controller, index);
                 configForm.Show();
                 configForm.Activate();
                 configForm.BringToFront();
                 configForm.FormClosed += configForm_FormClosed;
             }
         }
+
 
         private void ShowSettingForm()
         {

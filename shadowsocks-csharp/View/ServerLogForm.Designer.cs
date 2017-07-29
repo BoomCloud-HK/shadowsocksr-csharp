@@ -106,7 +106,7 @@
             this.ServerDataGrid.ReadOnly = true;
             this.ServerDataGrid.RowHeadersVisible = false;
             this.ServerDataGrid.RowTemplate.Height = 23;
-            this.ServerDataGrid.Size = new System.Drawing.Size(132, 34);
+            this.ServerDataGrid.Size = new System.Drawing.Size(636, 269);
             this.ServerDataGrid.TabIndex = 0;
             this.ServerDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ServerDataGrid_CellClick);
             this.ServerDataGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ServerDataGrid_CellDoubleClick);
@@ -250,6 +250,7 @@
             this.Download.MinimumWidth = 2;
             this.Download.Name = "Download";
             this.Download.ReadOnly = true;
+            this.Download.Visible = false;
             this.Download.Width = 60;
             // 
             // Upload
@@ -260,6 +261,7 @@
             this.Upload.MinimumWidth = 2;
             this.Upload.Name = "Upload";
             this.Upload.ReadOnly = true;
+            this.Upload.Visible = false;
             this.Upload.Width = 60;
             // 
             // DownloadRaw
@@ -270,6 +272,7 @@
             this.DownloadRaw.MinimumWidth = 2;
             this.DownloadRaw.Name = "DownloadRaw";
             this.DownloadRaw.ReadOnly = true;
+            this.DownloadRaw.Visible = false;
             this.DownloadRaw.Width = 60;
             // 
             // ErrorPercent
@@ -327,9 +330,9 @@
             // 
             // ServerLogForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(132, 22);
+            this.ClientSize = new System.Drawing.Size(636, 269);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ServerLogForm";

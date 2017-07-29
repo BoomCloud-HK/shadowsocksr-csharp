@@ -129,13 +129,11 @@ namespace Shadowsocks.View
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (FontDialog fontDialog = new FontDialog())
+            var fontDialog = new FontDialog();
+            fontDialog.Font = logTextBox.Font;
+            if (fontDialog.ShowDialog() == DialogResult.OK)
             {
-                fontDialog.Font = logTextBox.Font;
-                if (fontDialog.ShowDialog() == DialogResult.OK)
-                {
-                    logTextBox.Font = fontDialog.Font;
-                }
+                logTextBox.Font = fontDialog.Font;
             }
         }
 

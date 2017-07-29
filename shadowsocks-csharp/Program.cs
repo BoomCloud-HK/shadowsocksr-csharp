@@ -76,6 +76,8 @@ namespace Shadowsocks
                 }
 #endif
                 _controller = new ShadowsocksController();
+                Configuration _modifiedConfiguration = _controller.GetConfiguration();
+                _modifiedConfiguration.random = false;
                 HostMap.Instance().LoadHostFile();
 #if !_CONSOLE
                 _viewController = new MenuViewController(_controller);

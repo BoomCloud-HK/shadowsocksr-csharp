@@ -18,7 +18,6 @@ namespace Shadowsocks.View
     public partial class ConfigForm : Form
     {
         private ShadowsocksController controller;
-        private UpdateChecker updateChecker;
 
         // this is a copy of configuration that we are working on
         private Configuration _modifiedConfiguration;
@@ -29,7 +28,7 @@ namespace Shadowsocks.View
 
         private string _SelectedID = null;
 
-        public ConfigForm(ShadowsocksController controller, UpdateChecker updateChecker, int focusIndex)
+        public ConfigForm(ShadowsocksController controller, int focusIndex)
         {
             this.Font = System.Drawing.SystemFonts.MessageBoxFont;
             InitializeComponent();
@@ -42,9 +41,6 @@ namespace Shadowsocks.View
 
             this.Icon = Icon.FromHandle(Resources.ssw128.GetHicon());
             this.controller = controller;
-            this.updateChecker = updateChecker;
-            if (updateChecker.LatestVersionURL == null)
-                LinkUpdate.Visible = false;
 
             foreach (string name in EncryptorFactory.GetEncryptor())
             {
@@ -143,7 +139,6 @@ namespace Shadowsocks.View
         {
             this.Text = I18N.GetString("Edit Servers") + "("
                 + (controller.GetCurrentConfiguration().shareOverLan ? "any" : "local") + ":" + controller.GetCurrentConfiguration().localPort.ToString()
-                + I18N.GetString(" Version") + UpdateChecker.FullVersion
                 + ")";
 
             AddButton.Text = I18N.GetString("&Add");
@@ -181,8 +176,6 @@ namespace Shadowsocks.View
 
             OKButton.Text = I18N.GetString("OK");
             MyCancelButton.Text = I18N.GetString("Cancel");
-            LinkUpdate.MaximumSize = new Size(ServersListBox.Width, ServersListBox.Height);
-            LinkUpdate.Text = String.Format(I18N.GetString("New version {0} {1} available"), UpdateChecker.Name, updateChecker.LatestVersionNumber);
         }
 
         private void controller_ConfigChanged(object sender, EventArgs e)
@@ -233,11 +226,18 @@ namespace Shadowsocks.View
                     ret = 1; // display changed
                 }
                 Server oldServer = _modifiedConfiguration.configs[_oldSelectedIndex];
-                if (oldServer.isMatchServer(server))
+                if (oldServer.server == server.server
+                    && oldServer.server_port == server.server_port
+                    && oldServer.password == server.password
+                    && oldServer.method == server.method
+                    )
                 {
-                    server.setObfsData(oldServer.getObfsData());
-                    server.setProtocolData(oldServer.getProtocolData());
-                    server.enable = oldServer.enable;
+                    if (oldServer.obfs == server.obfs
+                        && oldServer.obfsparam == server.obfsparam)
+                        server.setObfsData(oldServer.getObfsData());
+                    if (oldServer.protocol == server.protocol
+                        && oldServer.protocolparam == server.protocolparam)
+                        server.setProtocolData(oldServer.getProtocolData());
                 }
                 _modifiedConfiguration.configs[_oldSelectedIndex] = server;
 
@@ -387,11 +387,11 @@ namespace Shadowsocks.View
                 {
                     if (!string.IsNullOrEmpty(server.group))
                     {
-                        ServersListBox.Items.Add(server.group + " - " + server.HiddenName());
+                        ServersListBox.Items.Add(" [" + server.group + "] " + server.HiddenName());
                     }
                     else
                     {
-                        ServersListBox.Items.Add("      " + server.HiddenName());
+                        ServersListBox.Items.Add(" " + server.HiddenName());
                     }
                 }
             }
@@ -401,11 +401,11 @@ namespace Shadowsocks.View
                 {
                     if (!string.IsNullOrEmpty(_modifiedConfiguration.configs[i].group))
                     {
-                        ServersListBox.Items[i] = _modifiedConfiguration.configs[i].group + " - " + _modifiedConfiguration.configs[i].HiddenName();
+                        ServersListBox.Items[i] = " [" + _modifiedConfiguration.configs[i].group + "] " + _modifiedConfiguration.configs[i].HiddenName();
                     }
                     else
                     {
-                        ServersListBox.Items[i] = "      " + _modifiedConfiguration.configs[i].HiddenName();
+                        ServersListBox.Items[i] = " " + _modifiedConfiguration.configs[i].HiddenName();
                     }
                 }
             }
@@ -513,10 +513,10 @@ namespace Shadowsocks.View
             {
                 _oldSelectedIndex = _modifiedConfiguration.configs.Count - 1;
             }
-            if (_oldSelectedIndex < 0)
-            {
-                _oldSelectedIndex = 0;
-            }
+            //if (_oldSelectedIndex < 0)
+            //{
+            //    _oldSelectedIndex = 0;
+            //}
             ServersListBox.SelectedIndex = _oldSelectedIndex;
             LoadConfiguration(_modifiedConfiguration);
             SetServerListSelectedIndex(_oldSelectedIndex);
@@ -683,11 +683,6 @@ namespace Shadowsocks.View
             {
                 ((TextBox)sender).SelectAll();
             }
-        }
-
-        private void LinkUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start(updateChecker.LatestVersionURL);
         }
 
         private void PasswordLabel_CheckedChanged(object sender, EventArgs e)

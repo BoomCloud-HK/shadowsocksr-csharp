@@ -135,8 +135,6 @@ namespace Shadowsocks.View
         {
             this.Text = title_perfix + I18N.GetString("ServerLog") + "("
                 + (controller.GetCurrentConfiguration().shareOverLan ? "any" : "local") + ":" + controller.GetCurrentConfiguration().localPort.ToString()
-                + "(" + Model.Server.GetForwardServerRef().GetConnections().Count.ToString()+ ")"
-                + " " + I18N.GetString("Version") + UpdateChecker.FullVersion
                 + ")";
         }
         private void UpdateTexts()
@@ -322,6 +320,9 @@ namespace Shadowsocks.View
                     ++list_index)
                 {
                     lastRefreshIndex = list_index + 1;
+                    if (list_index < displayBeginIndex || list_index >= displayEndIndex)
+                        continue;
+                    ++rowChangeCnt;
 
                     DataGridViewCell id_cell = ServerDataGrid[0, list_index];
                     int id = (int)id_cell.Value;
@@ -331,10 +332,6 @@ namespace Shadowsocks.View
                     rowChange = false;
                     for (int curcol = 0; curcol < ServerDataGrid.Columns.Count; ++curcol)
                     {
-                        if (!firstDispley
-                            && (ServerDataGrid.SortedColumn == null || ServerDataGrid.SortedColumn.Index != curcol)
-                            && (list_index < displayBeginIndex || list_index >= displayEndIndex))
-                            continue;
                         DataGridViewCell cell = ServerDataGrid[curcol, list_index];
                         string columnName = ServerDataGrid.Columns[curcol].Name;
                         // Server
@@ -614,7 +611,7 @@ namespace Shadowsocks.View
                             }
                         }
                     }
-                    if (rowChange && list_index >= displayBeginIndex && list_index < displayEndIndex)
+                    if (rowChange)
                         rowChangeCnt++;
                 }
             }
@@ -1009,7 +1006,6 @@ namespace Shadowsocks.View
         private long Str2Long(String str)
         {
             if (str == "-") return -1;
-            //if (String.IsNullOrEmpty(str)) return -1;
             if (str.LastIndexOf('K') > 0)
             {
                 Double ret = Convert.ToDouble(str.Substring(0, str.LastIndexOf('K')));
