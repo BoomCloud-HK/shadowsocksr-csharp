@@ -41,7 +41,7 @@ namespace Shadowsocks.Controller
                     Directory.CreateDirectory(curpath);
                 }
                 string new_date = DateTime.Now.ToString("yyyy-MM");
-                LogFileName = "shadowsocks_" + new_date + ".log";
+                LogFileName = "Boomcloud_" + new_date + ".log";
                 LogFile = Path.Combine(curpath, LogFileName);
                 _logFileStream = new FileStream(LogFile, FileMode.Append);
                 _logStreamWriter = new StreamWriterWithTimestamp(_logFileStream);

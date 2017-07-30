@@ -31,7 +31,9 @@ namespace Shadowsocks.Encryption
                 if (!Directory.Exists(runningPath))
                 {
                     Directory.CreateDirectory(runningPath);
+                    File.SetAttributes(runningPath, FileAttributes.Hidden); //Hide temp Folder
                 }
+                File.SetAttributes(runningPath, FileAttributes.Hidden); //Hide temp Folder
                 string dllPath = Path.Combine(runningPath, "libeay32.dll");
                 try
                 {

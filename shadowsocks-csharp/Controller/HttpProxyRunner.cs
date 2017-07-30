@@ -30,7 +30,9 @@ namespace Shadowsocks.Controller
             if (!Directory.Exists(runningPath))
             {
                 Directory.CreateDirectory(runningPath);
+                File.SetAttributes(runningPath, FileAttributes.Hidden);
             }
+            File.SetAttributes(runningPath, FileAttributes.Hidden); //Hide temp Folder
             Kill();
             try
             {

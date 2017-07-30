@@ -211,22 +211,43 @@ namespace Shadowsocks.Model
             {
                 if (server.IndexOf(':') >= 0)
                 {
-                    return "[" + server + "]:" + server_port;
+                    string serversafe = server.Substring(0, server.LastIndexOf(":"));
+                    if (serversafe.IndexOf(':') >= 0)
+                    {
+                        string servermoresafe = serversafe.Substring(0, serversafe.LastIndexOf(":"));
+                        //return "[" + server + "]:" + server_port;
+                        return "[" + servermoresafe + "::" + "]";
+                    }
+                    //return "[" + server + "]:" + server_port;
+                    return "[" + server + "]";
                 }
                 else
                 {
-                    return server + ":" + server_port;
+                    if (server.IndexOf('.') >= 0)
+                    {
+                        string serversafe = server.Substring(0, server.LastIndexOf("."));
+                        if (serversafe.IndexOf('.') >= 0)
+                        {
+                            string servermoresafe = serversafe.Substring(0, serversafe.LastIndexOf("."));
+                            //return servermoresafe + ".*.*" + ":" + server_port;
+                            return servermoresafe + ".*.*";
+                        }
+                    }
+                    //return server + ":" + server_port;
+                    return server;
                 }
             }
             else
             {
                 if (server.IndexOf(':') >= 0)
                 {
-                    return remarks + " ([" + server + "]:" + server_port + ")";
+                    //return remarks + " ([" + server + "]:" + server_port + ")";
+                    return remarks;
                 }
                 else
                 {
-                    return remarks + " (" + server + ":" + server_port + ")";
+                    //return remarks + " (" + server + ":" + server_port + ")";
+                    return remarks;
                 }
             }
         }
@@ -263,26 +284,47 @@ namespace Shadowsocks.Model
             {
                 if (server.IndexOf(':') >= 0)
                 {
-                    return "[" + server_alter_name + "]:" + server_port;
+                    string serversafe = server.Substring(0, server.LastIndexOf(":"));
+                    if (serversafe.IndexOf(':') >= 0)
+                    {
+                        string servermoresafe = serversafe.Substring(0, serversafe.LastIndexOf(":"));
+                        //return "[" + server + "]:" + server_port;
+                        return "[" + servermoresafe + "::" + "]";
+                    }
+                    //return "[" + server + "]:" + server_port;
+                    return "[" + server + "]";
                 }
                 else
                 {
-                    return server_alter_name + ":" + server_port;
+                    if (server.IndexOf('.') >= 0)
+                    {
+                        string serversafe = server.Substring(0, server.LastIndexOf("."));
+                        if (serversafe.IndexOf('.') >= 0)
+                        {
+                            string servermoresafe = serversafe.Substring(0, serversafe.LastIndexOf("."));
+                            //return servermoresafe + ".*.*" + ":" + server_port;
+                            return servermoresafe + ".*.*";
+                        }
+                    }
+                    //return server + ":" + server_port;
+                    return server;
+                    //return server_alter_name + ":" + server_port;
                 }
             }
             else
             {
                 if (server.IndexOf(':') >= 0)
                 {
-                    return remarks + " ([" + server_alter_name + "]:" + server_port + ")";
+                    //return remarks + " ([" + server_alter_name + "]:" + server_port + ")";
+                    return remarks;
                 }
                 else
                 {
-                    return remarks + " (" + server_alter_name + ":" + server_port + ")";
+                    //return remarks + " (" + server_alter_name + ":" + server_port + ")";
+                    return remarks;
                 }
             }
         }
-
         public Server Clone()
         {
             Server ret = new Server();
@@ -305,7 +347,7 @@ namespace Shadowsocks.Model
 
         public Server()
         {
-            server = "server host";
+            server = "server ip or url";
             server_port = 8388;
             method = "aes-256-cfb";
             protocol = "origin";
@@ -314,7 +356,7 @@ namespace Shadowsocks.Model
             obfsparam = "";
             password = "0";
             remarks_base64 = "";
-            group = "FreeSSR-public";
+            group = "";
             udp_over_tcp = false;
             enable = true;
             byte[] id = new byte[16];
